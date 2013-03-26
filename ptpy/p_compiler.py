@@ -5,9 +5,9 @@ from compiler import symbols, pyassem, future
 
 from compiler.consts import CO_NEWLOCALS
 
-import ptpyparser
-import ptpysymbols
-import ptpybuiltins
+import ptpy.parser as ptpyparser
+import ptpy.symbols as ptpysymbols
+import ptpy.builtins as ptpybuiltins
 
 
 

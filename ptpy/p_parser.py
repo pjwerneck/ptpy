@@ -1,13 +1,17 @@
 
 
 
-import ptpylexer
-import ptpyast
 import ply.yacc as yacc
+
 from compiler import ast
 from compiler.consts import *
 
-tokens = ptpylexer.tokens
+import p_lexer
+import p_ast
+
+
+
+tokens = p_lexer.tokens
 
 
 # AST
@@ -26,47 +30,47 @@ class Node(object):
 
 binary_ops = {
     # operators
-    "+": ptpyast.Add,
-    "-": ptpyast.Sub,
-    "*": ptpyast.Mul,
-    "/": ptpyast.Div,
-    "%": ptpyast.Mod,
-    "<<": ptpyast.LeftShift,
-    ">>": ptpyast.RightShift,
-    "&": ptpyast.Bitand,
-    "^": ptpyast.Bitxor,
-    "|": ptpyast.Bitor,
+    "+": p_ast.Add,
+    "-": p_ast.Sub,
+    "*": p_ast.Mul,
+    "/": p_ast.Div,
+    "%": p_ast.Mod,
+    "<<": p_ast.LeftShift,
+    ">>": p_ast.RightShift,
+    "&": p_ast.Bitand,
+    "^": p_ast.Bitxor,
+    "|": p_ast.Bitor,
     # augmented assigns
-    "+=": ptpyast.AugAssign,
-    "-=": ptpyast.AugAssign,
-    "*=": ptpyast.AugAssign,
-    "**=": ptpyast.AugAssign,
-    "/=": ptpyast.AugAssign,
-    "%=": ptpyast.AugAssign,
-    "<<=": ptpyast.AugAssign,
-    ">>=": ptpyast.AugAssign,
-    "&=": ptpyast.AugAssign,
-    "^=": ptpyast.AugAssign,
-    "|=": ptpyast.AugAssign,
+    "+=": p_ast.AugAssign,
+    "-=": p_ast.AugAssign,
+    "*=": p_ast.AugAssign,
+    "**=": p_ast.AugAssign,
+    "/=": p_ast.AugAssign,
+    "%=": p_ast.AugAssign,
+    "<<=": p_ast.AugAssign,
+    ">>=": p_ast.AugAssign,
+    "&=": p_ast.AugAssign,
+    "^=": p_ast.AugAssign,
+    "|=": p_ast.AugAssign,
     # comparison
-    "==": lambda (left, right): ptpyast.Compare(left, [('==', right)]),
-    "<" : lambda (left, right): ptpyast.Compare(left, [('<', right)]),
-    "<=": lambda (left, right): ptpyast.Compare(left, [('<=', right)]),
-    ">" : lambda (left, right): ptpyast.Compare(left, [('>', right)]),
-    ">=": lambda (left, right): ptpyast.Compare(left, [('>=', right)]),
-    "!=": lambda (left, right): ptpyast.Compare(left, [('!=', right)]),
+    "==": lambda (left, right): p_ast.Compare(left, [('==', right)]),
+    "<" : lambda (left, right): p_ast.Compare(left, [('<', right)]),
+    "<=": lambda (left, right): p_ast.Compare(left, [('<=', right)]),
+    ">" : lambda (left, right): p_ast.Compare(left, [('>', right)]),
+    ">=": lambda (left, right): p_ast.Compare(left, [('>=', right)]),
+    "!=": lambda (left, right): p_ast.Compare(left, [('!=', right)]),
     # identity
-    "is": lambda (left, right): ptpyast.Compare(left, [('is', right)]),
-    "is not": lambda (left, right): ptpyast.Compare(left, [('is not', right)]),
+    "is": lambda (left, right): p_ast.Compare(left, [('is', right)]),
+    "is not": lambda (left, right): p_ast.Compare(left, [('is not', right)]),
     # contains
-    "in": lambda (left, right): ptpyast.Compare(left, [('in', right)]),
-    "not in": lambda (left, right): ptpyast.Compare(left, [('not in', right)]),
+    "in": lambda (left, right): p_ast.Compare(left, [('in', right)]),
+    "not in": lambda (left, right): p_ast.Compare(left, [('not in', right)]),
 }
 
 
 unary_ops = {
-    "+": ptpyast.UnaryAdd,
-    "-": ptpyast.UnarySub,
+    "+": p_ast.UnaryAdd,
+    "-": p_ast.UnarySub,
 }
 #shift/reduce conflict in state 5 resolved as shift.
 #shift/reduce conflict in state 5 resolved as shift.
@@ -102,7 +106,7 @@ precedence = (
 def p_file_input_end(p):
     """file_input_end : file_input ENDMARKER    
     """
-    p[0] = ptpyast.Stmt(p[1])
+    p[0] = p_ast.Stmt(p[1])
 
 
 def p_file_input(p):
@@ -179,18 +183,18 @@ def p_small_stmt(p):
 def p_break(p):
     """flow_stmt : BREAK
     """
-    p[0] = ptpyast.Break(None)
+    p[0] = p_ast.Break(None)
     
 
 def p_continue(p):
     """flow_stmt : CONTINUE
     """
-    p[0] = ptpyast.Continue(None)
+    p[0] = p_ast.Continue(None)
 
 def p_pass(p):
     """flow_stmt : PASS
     """
-    p[0] = ptpyast.Pass(None)
+    p[0] = p_ast.Pass(None)
 
 # assert_stmt: 'assert' test [',' test]
 def p_assert(p):
@@ -198,9 +202,9 @@ def p_assert(p):
                    | ASSERT test COMMA test
                    """
     if len(p) == 3:
-        p[0] = ptpyast.Assert(p[2], None)
+        p[0] = p_ast.Assert(p[2], None)
     else:
-        p[0] = ptpyast.Assert(p[2], p[4])
+        p[0] = p_ast.Assert(p[2], p[4])
     
 
 # expr_stmt: testlist (augassign (yield_expr|testlist) |
@@ -225,7 +229,7 @@ def p_aug_assign(p):
                  | testlist IXOR testlist
                  """
     left, op, right = p[1], p[2], p[3]
-    p[0] = ptpyast.AugAssign(p[1], p[2], p[3])
+    p[0] = p_ast.AugAssign(p[1], p[2], p[3])
     
 def p_expr_stmt(p):
     """expr_stmt : testlist ASSIGN testlist
@@ -233,21 +237,21 @@ def p_expr_stmt(p):
                  """
     if len(p) == 2:
         # expressions, not assigned anywhere
-        p[0] = ptpyast.Discard(p[1])
+        p[0] = p_ast.Discard(p[1])
     else:
         left, right = p[1], p[3]
         # make sure assignment to literal fails
-        if isinstance(left, ptpyast.Const):
+        if isinstance(left, p_ast.Const):
             raise SyntaxError("Cannot assign to literal")
         
         # simple assignment
-        if isinstance(left, ptpyast.Name):
-            p[0] = ptpyast.Assign([ptpyast.AssName(left.name, OP_ASSIGN)], right)
+        if isinstance(left, p_ast.Name):
+            p[0] = p_ast.Assign([p_ast.AssName(left.name, OP_ASSIGN)], right)
 
         # attribute assignment
-        elif isinstance(left, ptpyast.Getattr):
+        elif isinstance(left, p_ast.Getattr):
             var, attr = left.asList()
-            p[0] = ptpyast.Assign([ptpyast.AssAttr(var, attr, OP_ASSIGN)], right)
+            p[0] = p_ast.Assign([p_ast.AssAttr(var, attr, OP_ASSIGN)], right)
 
         else:
             raise NotImplementedError("only single assignments: %r"%left)
@@ -260,9 +264,9 @@ def p_def_code_stmt(p):
                    """
 
     if len(p) == 5:
-        p[0] = ptpyast.Code(p[2], p[4], lazy=True)
+        p[0] = p_ast.Code(p[2], p[4], lazy=True)
     elif len(p) == 6:
-        p[0] = ptpyast.Code(p[3], p[5], wrapper=p[2], lazy=True)
+        p[0] = p_ast.Code(p[3], p[5], wrapper=p[2], lazy=True)
     else:
         raise NotImplementedError(len(p))
 
@@ -273,27 +277,27 @@ def p_while_stmt(p):
                   | WHILE test COLON suite else_stmt
     """
     if len(p) == 5:
-        p[0] = ptpyast.While(p[2], p[4], None)
+        p[0] = p_ast.While(p[2], p[4], None)
     else:
-        p[0] = ptpyast.While(p[2], p[4], p[5])
+        p[0] = p_ast.While(p[2], p[4], p[5])
     
 
 def p_for_stmt(p):
     """for_stmt : FOR NAME IN test COLON suite
                 | FOR NAME IN test COLON suite else_stmt
     """
-    assign = ptpyast.AssName(p[2], OP_ASSIGN)
+    assign = p_ast.AssName(p[2], OP_ASSIGN)
     if len(p) == 7:
-        p[0] = ptpyast.For(assign, p[4], p[6], None)
+        p[0] = p_ast.For(assign, p[4], p[6], None)
     else:
-        p[0] = ptpyast.For(assign, p[4], p[6], p[7])        
+        p[0] = p_ast.For(assign, p[4], p[6], p[7])        
 
 
 def p_exec_stmt(p):
     # FIXME: conflict with "test IN test"
     """exec_stmt : EXEC NAME IN test"""
     # exec code in global, local
-    p[0] = ptpyast.Exec(p[2], None, p[4])
+    p[0] = p_ast.Exec(p[2], None, p[4])
 
 
 def p_if_stmt(p):
@@ -301,9 +305,9 @@ def p_if_stmt(p):
                | conds else_stmt
     """
     if len(p) == 2:
-        p[0] = ptpyast.If(p[1], None)
+        p[0] = p_ast.If(p[1], None)
     elif len(p) == 3:
-        p[0] = ptpyast.If(p[1], p[2])
+        p[0] = p_ast.If(p[1], p[2])
 
 
 def p_conds(p):
@@ -348,9 +352,9 @@ def p_suite(p):
              | NEWLINE INDENT stmts DEDENT
             """
     if len(p) == 2:
-        p[0] = ptpyast.Stmt(p[1])
+        p[0] = p_ast.Stmt(p[1])
     else:
-        p[0] = ptpyast.Stmt(p[3])
+        p[0] = p_ast.Stmt(p[3])
 
 
 ### statements
@@ -372,7 +376,7 @@ def p_or_test(p):
                | and_test
                """
     if len(p) == 4:
-        p[0] = ptpyast.Or((p[1], p[3]))
+        p[0] = p_ast.Or((p[1], p[3]))
     else:
         p[0] = p[1]
 
@@ -383,7 +387,7 @@ def p_and_test(p):
                 | not_test
                 """
     if len(p) == 4:
-        p[0] = ptpyast.And((p[1], p[3]))
+        p[0] = p_ast.And((p[1], p[3]))
     else:
         p[0] = p[1]
         
@@ -394,7 +398,7 @@ def p_not_test(p):
                 | comparison
                 """
     if len(p) == 3:
-        p[0] = ptpyast.Not(p[2])
+        p[0] = p_ast.Not(p[2])
     else:
         p[0] = p[1]
 
@@ -517,7 +521,7 @@ def p_power(p):
              | atom_attr
              """
     if len(p) == 4:
-        p[0] = ptpyast.Power((p[1], p[3]))
+        p[0] = p_ast.Power((p[1], p[3]))
     else:
         p[0] = p[1]
 
@@ -528,7 +532,7 @@ def p_atom_attr(p):
     """
     if len(p) == 4:
         # FIXME: name?
-        p[0] = ptpyast.Getattr(p[1], p[3].name)
+        p[0] = p_ast.Getattr(p[1], p[3].name)
     else:
         p[0] = p[1]
                           
@@ -545,7 +549,7 @@ def p_atom_call(p):
         p[0] = p[1]
     elif len(p) == 3:
         if p[2][0] == 'CALL':
-            p[0] = ptpyast.CallFunc(p[1], p[2][1], None, None)
+            p[0] = p_ast.CallFunc(p[1], p[2][1], None, None)
         else:
             raise NotImplementedError('not CALL')
     else:
@@ -555,28 +559,28 @@ def p_atom_call(p):
 # varname 
 def p_atom_name(p):
     """atom : NAME"""
-    p[0] = ptpyast.Name(p[1])
+    p[0] = p_ast.Name(p[1])
 
 # constants: FIXME: use Decimal for numbers?
 def p_atom_int(p):
     """atom : ICONST
     """
-    p[0] = ptpyast.Const(int(p[1]))
+    p[0] = p_ast.Const(int(p[1]))
 
 def p_atom_float(p):
     """atom : FCONST
     """
-    p[0] = ptpyast.Const(float(p[1]))
+    p[0] = p_ast.Const(float(p[1]))
     
 def p_atom_string(p):
     """atom : SCONST
     """
-    p[0] = ptpyast.Const(p[1])#FIXME
+    p[0] = p_ast.Const(p[1])#FIXME
 
 def p_atom_list(p):
     """atom : LBRACKET testlist RBRACKET
     """
-    p[0] = ptpyast.List(p[2].nodes)
+    p[0] = p_ast.List(p[2].nodes)
 
 # tuple
 def p_atom_tuple(p):
@@ -585,7 +589,7 @@ def p_atom_tuple(p):
 
 def p_atom_dict(p):
     """atom : LBRACE keyvaluelist RBRACE"""
-    p[0] = ptpyast.Dict(p[2])
+    p[0] = p_ast.Dict(p[2])
 
 def p_keyvaluelist(p):
     """keyvaluelist : keyvalue COMMA keyvaluelist
@@ -602,7 +606,7 @@ def p_keyvaluelist(p):
 def p_keyvalue(p):
     """keyvalue : SCONST COLON test
     """
-    p[0] = (ptpyast.Const(p[1]), p[3]) #FIXME
+    p[0] = (p_ast.Const(p[1]), p[3]) #FIXME
 
 # trailer : '(' [arglist] ')' | '[' subscriptlist ']' | '.' NAME
 def p_trailer(p):
@@ -631,12 +635,12 @@ def p_testlist(p):
     if len(p) == 2:
         p[0] = p[1]
     elif len(p) == 3:
-        p[0] = ptpyast.Tuple([p[1]])
+        p[0] = p_ast.Tuple([p[1]])
     elif len(p) == 4:
-        if isinstance(p[3], ptpyast.Tuple):
-            p[0] = ptpyast.Tuple((p[1],) + p[3].asList())
+        if isinstance(p[3], p_ast.Tuple):
+            p[0] = p_ast.Tuple((p[1],) + p[3].asList())
         else:
-            p[0] = ptpyast.Tuple((p[1], p[3]))
+            p[0] = p_ast.Tuple((p[1], p[3]))
     else:
         raise NotImplementedError(len(p))
        
@@ -647,7 +651,7 @@ def p_test(p):
             | or_test IF or_test ELSE test
             """
     if len(p) == 6:
-        p[0] = ptpyast.IfExp(p[3], p[1], p[5])
+        p[0] = p_ast.IfExp(p[3], p[1], p[5])
     else:
         p[0] = p[1]
         
@@ -688,14 +692,14 @@ def p_error(t):
     if t is None:
         raise SyntaxError('End of file reached: %r'%yacc.parser.symstack)
     else:
-        raise SyntaxError('Ptpy Syntax Error: %r'%t)
+        raise SyntaxError('Syntax Error: %r'%t)
     
 
 
 class PtpyParser(object):
     def __init__(self, lexer=None):
         if lexer is None:
-            lexer = ptpylexer.PtpyLexer()
+            lexer = p_lexer.PtpyLexer()
         self._lexer = lexer
         self._parser = yacc.yacc()
 
@@ -703,7 +707,7 @@ class PtpyParser(object):
         code = code.strip()
         self._lexer.input(code, add_endmarker=add_endmarker)
         result = self._parser.parse(lexer=self._lexer)
-        module = ptpyast.Module(None, result)
+        module = p_ast.Module(None, result)
         return module
               
 
@@ -713,7 +717,7 @@ def traverse(node, level=""):
     
     yield "%s%s"%(level, node.__class__.__name__)
     for subnode in node:
-        if not isinstance(subnode, ptpyast.Node):
+        if not isinstance(subnode, p_ast.Node):
             yield "%s%r"%(level+" ", subnode)
             continue
         for subiter in traverse(subnode, level+" "):
