@@ -1,7 +1,16 @@
+# -*- coding: utf-8 -*-
+#
+# contributor : Pedro Werneck
+# name : Python file template .... :
+
+__author__ = "Pedro Werneck (pjwerneck@gmail.com)"
+__date__ = "Sat Sep 29 00:23:11 2012"
+
 
 from compiler import misc, syntax, pycodegen, visitor, symbols
 
-from compiler.consts import SC_LOCAL, SC_GLOBAL, SC_FREE, SC_CELL, SC_UNKNOWN
+from compiler.consts import *
+
 
 class CodeScope(symbols.Scope):
 

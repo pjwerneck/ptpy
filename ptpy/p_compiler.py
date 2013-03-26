@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+#
+# contributor : Pedro Werneck
+# name : Python file template .... :
+
+__author__ = "Pedro Werneck (pjwerneck@gmail.com)"
+__date__ = "Sat Sep 29 00:23:11 2012"
+
 
 
 from compiler import misc, syntax, pycodegen, visitor
@@ -5,9 +13,9 @@ from compiler import symbols, pyassem, future
 
 from compiler.consts import CO_NEWLOCALS
 
-import ptpy.parser as ptpyparser
-import ptpy.symbols as ptpysymbols
-import ptpy.builtins as ptpybuiltins
+import ptpy.p_parser as ptpyparser
+import ptpy.p_symbols as ptpysymbols
+import ptpy.p_builtins as ptpybuiltins
 
 
 

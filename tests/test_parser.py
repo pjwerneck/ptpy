@@ -1,13 +1,22 @@
+# -*- coding: utf-8 -*-
+#
+# contributor : Pedro Werneck
+# name : Python file template .... :
 
+__author__ = "Pedro Werneck (pjwerneck@gmail.com)"
+__date__ = "Sat Sep 29 00:23:11 2012"
+
+
+import unittest
+
+from compiler import ast, misc, syntax, pycodegen
+from compiler.consts import *
 
 import ply.yacc as yacc
-from ptpyparser import PtpyParser
-from ptpycompiler import PtpyCompiler
-import unittest
-from compiler import ast
 
-from compiler import misc, syntax, pycodegen
-from compiler.consts import *
+from ptpy.p_parser import PtpyParser
+from ptpy.p_compiler import PtpyCompiler
+
 
 
 

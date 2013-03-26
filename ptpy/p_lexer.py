@@ -456,7 +456,7 @@ class PtpyLexer(object):
 if __name__ == '__main__':
     lexer = PtpyLexer(reflags=re.UNICODE)
 
-    data = raw_input().decode('iso8859-1')
+    data = raw_input()
 
 
     print repr(data)
