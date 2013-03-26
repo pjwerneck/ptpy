@@ -1,0 +1,276 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    RETURN
+    RAISE
+    GLOBAL
+    DEL
+    PRINT
+    DEF
+    EXCEPT
+    IMPORT
+    CLASS
+    WS
+    TRY
+    FINALLY
+    FROM
+    LAMBDA
+
+Grammar
+
+Rule 0     S' -> file_input_end
+Rule 1     file_input_end -> file_input ENDMARKER
+Rule 2     file_input -> file_input NEWLINE
+Rule 3     file_input -> file_input stmt
+Rule 4     file_input -> NEWLINE
+Rule 5     file_input -> stmt
+Rule 6     stmt -> simple_stmt
+Rule 7     stmt -> compound_stmt
+Rule 8     simple_stmt -> small_stmts NEWLINE
+Rule 9     simple_stmt -> small_stmts SEMICOLON NEWLINE
+Rule 10    compound_stmt -> if_stmt
+Rule 11    compound_stmt -> while_stmt
+Rule 12    compound_stmt -> for_stmt
+Rule 13    compound_stmt -> define_stmt
+Rule 14    small_stmts -> small_stmts SEMICOLON small_stmt
+Rule 15    small_stmts -> small_stmt
+Rule 16    small_stmt -> expr_stmt
+Rule 17    small_stmt -> assert_stmt
+Rule 18    small_stmt -> flow_stmt
+Rule 19    small_stmt -> exec_stmt
+Rule 20    flow_stmt -> BREAK
+Rule 21    flow_stmt -> CONTINUE
+Rule 22    flow_stmt -> PASS
+Rule 23    assert_stmt -> ASSERT test
+Rule 24    assert_stmt -> ASSERT test COMMA test
+Rule 25    expr_stmt -> testlist IPLUS testlist
+Rule 26    expr_stmt -> testlist IMINUS testlist
+Rule 27    expr_stmt -> testlist IDIV testlist
+Rule 28    expr_stmt -> testlist IMUL testlist
+Rule 29    expr_stmt -> testlist IMOD testlist
+Rule 30    expr_stmt -> testlist IPOW testlist
+Rule 31    expr_stmt -> testlist ILSHIFT testlist
+Rule 32    expr_stmt -> testlist IRSHIFT testlist
+Rule 33    expr_stmt -> testlist IAND testlist
+Rule 34    expr_stmt -> testlist IOR testlist
+Rule 35    expr_stmt -> testlist INOT testlist
+Rule 36    expr_stmt -> testlist IXOR testlist
+Rule 37    expr_stmt -> testlist ASSIGN testlist
+Rule 38    expr_stmt -> testlist
+Rule 39    define_stmt -> DEFINE NAME COLON suite
+Rule 40    define_stmt -> DEFINE expr NAME COLON suite
+Rule 41    while_stmt -> WHILE test COLON suite
+Rule 42    while_stmt -> WHILE test COLON suite else_stmt
+Rule 43    for_stmt -> FOR NAME IN test COLON suite
+Rule 44    for_stmt -> FOR NAME IN test COLON suite else_stmt
+Rule 45    exec_stmt -> EXEC NAME IN test
+Rule 46    if_stmt -> conds
+Rule 47    if_stmt -> conds else_stmt
+Rule 48    conds -> if_cond
+Rule 49    conds -> if_cond elif_conds
+Rule 50    else_stmt -> ELSE COLON suite
+Rule 51    elif_conds -> elif_conds elif_cond
+Rule 52    elif_conds -> elif_cond
+Rule 53    elif_cond -> ELIF test COLON suite
+Rule 54    if_cond -> IF test COLON suite
+Rule 55    suite -> simple_stmt
+Rule 56    suite -> NEWLINE INDENT stmts DEDENT
+Rule 57    stmts -> stmts stmt
+Rule 58    stmts -> stmt
+Rule 59    or_test -> or_test BOR and_test
+Rule 60    or_test -> and_test
+Rule 61    and_test -> and_test BAND not_test
+Rule 62    and_test -> not_test
+Rule 63    not_test -> BNOT not_test
+Rule 64    not_test -> comparison
+Rule 65    comparison -> expr LT expr
+Rule 66    comparison -> expr LE expr
+Rule 67    comparison -> expr GT expr
+Rule 68    comparison -> expr GE expr
+Rule 69    comparison -> expr NE expr
+Rule 70    comparison -> expr EQ expr
+Rule 71    comparison -> expr IS expr
+Rule 72    comparison -> expr IS BNOT expr
+Rule 73    comparison -> expr IN expr
+Rule 74    comparison -> expr BNOT IN expr
+Rule 75    comparison -> expr
+Rule 76    expr -> expr OR xor_expr
+Rule 77    expr -> xor_expr
+Rule 78    xor_expr -> xor_expr XOR and_expr
+Rule 79    xor_expr -> and_expr
+Rule 80    and_expr -> and_expr AND shift_expr
+Rule 81    and_expr -> shift_expr
+Rule 82    shift_expr -> shift_expr LSHIFT arith_expr
+Rule 83    shift_expr -> shift_expr RSHIFT arith_expr
+Rule 84    shift_expr -> arith_expr
+Rule 85    arith_expr -> arith_expr PLUS term
+Rule 86    arith_expr -> arith_expr MINUS term
+Rule 87    arith_expr -> term
+Rule 88    term -> term MULT factor
+Rule 89    term -> term DIV factor
+Rule 90    term -> term MOD factor
+Rule 91    term -> factor
+Rule 92    factor -> PLUS factor
+Rule 93    factor -> MINUS factor
+Rule 94    factor -> NOT factor
+Rule 95    factor -> power
+Rule 96    power -> power POW atom_attr
+Rule 97    power -> atom_attr
+Rule 98    atom_attr -> atom_attr DOT atom_call
+Rule 99    atom_attr -> atom_call
+Rule 100   atom_call -> atom
+Rule 101   atom_call -> atom trailer
+Rule 102   atom -> NAME
+Rule 103   atom -> ICONST
+Rule 104   atom -> FCONST
+Rule 105   atom -> SCONST
+Rule 106   atom -> LBRACKET testlist RBRACKET
+Rule 107   atom -> LPAREN testlist RPAREN
+Rule 108   atom -> LBRACE keyvaluelist RBRACE
+Rule 109   keyvaluelist -> keyvalue COMMA keyvaluelist
+Rule 110   keyvaluelist -> keyvalue COMMA
+Rule 111   keyvaluelist -> keyvalue
+Rule 112   keyvalue -> SCONST COLON test
+Rule 113   trailer -> LPAREN arglist RPAREN
+Rule 114   trailer -> LPAREN RPAREN
+Rule 115   testlist -> test COMMA testlist
+Rule 116   testlist -> test COMMA
+Rule 117   testlist -> test
+Rule 118   test -> or_test
+Rule 119   test -> or_test IF or_test ELSE test
+Rule 120   arglist -> argument COMMA arglist
+Rule 121   arglist -> argument COMMA
+Rule 122   arglist -> argument
+Rule 123   argument -> test
+
+Terminals, with rules where they appear
+
+AND                  : 80
+ASSERT               : 23 24
+ASSIGN               : 37
+BAND                 : 61
+BNOT                 : 63 72 74
+BOR                  : 59
+BREAK                : 20
+CLASS                : 
+COLON                : 39 40 41 42 43 44 50 53 54 112
+COMMA                : 24 109 110 115 116 120 121
+CONTINUE             : 21
+DEDENT               : 56
+DEF                  : 
+DEL                  : 
+DIV                  : 89
+DOT                  : 98
+ELIF                 : 53
+ELSE                 : 50 119
+ENDMARKER            : 1
+EQ                   : 70
+EXCEPT               : 
+EXEC                 : 45
+FCONST               : 104
+FINALLY              : 
+FOR                  : 43 44
+FROM                 : 
+GE                   : 68
+GLOBAL               : 
+GT                   : 67
+IAND                 : 33
+ICONST               : 103
+IDIV                 : 27
+IF                   : 54 119
+ILSHIFT              : 31
+IMINUS               : 26
+IMOD                 : 29
+IMPORT               : 
+IMUL                 : 28
+IN                   : 43 44 45 73 74
+INDENT               : 56
+INOT                 : 35
+IOR                  : 34
+IPLUS                : 25
+IPOW                 : 30
+IRSHIFT              : 32
+IS                   : 71 72
+IXOR                 : 36
+LAMBDA               : 
+LBRACE               : 108
+LBRACKET             : 106
+LE                   : 66
+LPAREN               : 107 113 114
+LSHIFT               : 82
+LT                   : 65
+MINUS                : 86 93
+MOD                  : 90
+MULT                 : 88
+NAME                 : 39 40 43 44 45 102
+NE                   : 69
+NEWLINE              : 2 4 8 9 56
+NOT                  : 94
+OR                   : 76
+PASS                 : 22
+PLUS                 : 85 92
+POW                  : 96
+PRINT                : 
+RAISE                : 
+RBRACE               : 108
+RBRACKET             : 106
+RETURN               : 
+RPAREN               : 107 113 114
+RSHIFT               : 83
+SCONST               : 105 112
+SEMICOLON            : 9 14
+TRY                  : 
+WHILE                : 41 42
+WS                   : 
+XOR                  : 78
+error                : 
+
+Nonterminals, with rules where they appear
+
+DEFINE               : 39 40
+and_expr             : 78 79 80
+and_test             : 59 60 61
+arglist              : 113 120
+argument             : 120 121 122
+arith_expr           : 82 83 84 85 86
+assert_stmt          : 17
+atom                 : 100 101
+atom_attr            : 96 97 98
+atom_call            : 98 99
+comparison           : 64
+compound_stmt        : 7
+conds                : 46 47
+define_stmt          : 13
+elif_cond            : 51 52
+elif_conds           : 49 51
+else_stmt            : 42 44 47
+exec_stmt            : 19
+expr                 : 40 65 65 66 66 67 67 68 68 69 69 70 70 71 71 72 72 73 73 74 74 75 76
+expr_stmt            : 16
+factor               : 88 89 90 91 92 93 94
+file_input           : 1 2 3
+file_input_end       : 0
+flow_stmt            : 18
+for_stmt             : 12
+if_cond              : 48 49
+if_stmt              : 10
+keyvalue             : 109 110 111
+keyvaluelist         : 108 109
+not_test             : 61 62 63
+or_test              : 59 118 119 119
+power                : 95 96
+shift_expr           : 80 81 82 83
+simple_stmt          : 6 55
+small_stmt           : 14 15
+small_stmts          : 8 9 14
+stmt                 : 3 5 57 58
+stmts                : 56 57
+suite                : 39 40 41 42 43 44 50 53 54
+term                 : 85 86 87 88 89 90
+test                 : 23 24 24 41 42 43 44 45 53 54 112 115 116 117 119 123
+testlist             : 25 25 26 26 27 27 28 28 29 29 30 30 31 31 32 32 33 33 34 34 35 35 36 36 37 37 38 106 107 115
+trailer              : 101
+while_stmt           : 11
+xor_expr             : 76 77 78
+
