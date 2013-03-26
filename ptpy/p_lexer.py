@@ -7,7 +7,7 @@ __author__ = "Pedro Werneck (pjwerneck@gmail.com)"
 __date__ = "Sat Sep 29 00:21:50 2012"
 
 
-
+import re
 
 import ply.lex as lex
 
@@ -33,7 +33,7 @@ RESERVED = {
     'se': 'IF',  # if
     'importar': 'IMPORT',  # import
     'em': 'IN',  # in
-    'é': 'IS',  # is
+    'is': 'IS',  # is
     'lambda': 'LAMBDA',  # lambda
     'nao': 'BNOT',  # not
     'ou': 'BOR',  # or
@@ -454,9 +454,14 @@ class PtpyLexer(object):
 
 
 if __name__ == '__main__':
-    lexer = PtpyLexer()
+    lexer = PtpyLexer(reflags=re.UNICODE)
 
-    lexer.input(open("sample_ptpy.py").read())
+    data = raw_input().decode('iso8859-1')
+
+
+    print repr(data)
+
+    lexer.input(data)
 
     while 1:
         tok = lexer.token()
