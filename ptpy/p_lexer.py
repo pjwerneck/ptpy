@@ -15,34 +15,39 @@ import ply.lex as lex
 
 # Reserved words
 RESERVED = {
-    'e': 'BAND',  # and
     'garantir': 'ASSERT',  # assert
-    'interromper': 'BREAK',  # break
-    'classe': 'CLASS',  # class
+    'e': 'BAND',  # and
     'continuar': 'CONTINUE',  # continue
-    'define': 'DEF',  # def
-    'apagar': 'DEL',  # del
-    'senao': 'ELIF',  # elif
-    'else': 'ELSE',  # else
-    'exceto': 'EXCEPT',  # except
+    'classe': 'CLASS',  # class
+    'importar': 'IMPORT',  # import
     'executar': 'EXEC',  # exec
-    'finalmente': 'FINALLY',  # finally
+    'global': 'GLOBAL',  # global
+    'ou': 'BOR',  # or
+    'enquanto': 'WHILE',  # while
+    'tentar': 'TRY',  # try
+    'em': 'IN',  # in
     'para': 'FOR',  # for
     'de': 'FROM',  # from
-    'global': 'GLOBAL',  # global
-    'se': 'IF',  # if
-    'importar': 'IMPORT',  # import
-    'em': 'IN',  # in
-    'is': 'IS',  # is
-    'lambda': 'LAMBDA',  # lambda
-    'nao': 'BNOT',  # not
-    'ou': 'BOR',  # or
-    'passar': 'PASS',  # pass
+
+    'sair': 'BREAK',  # break
+    'definir': 'DEF',  # def
+    'apagar': 'DEL',  # del
+    'finalizar': 'FINALLY',  # finally
     'exibir': 'PRINT',  # print
+    'devolver': 'RETURN',  # return
+    'passar': 'PASS',  # pass
+
+    'exceto': 'EXCEPT',  # except
+    'lambda': 'LAMBDA',  # lambda
+
     'raise': 'RAISE',  # raise
-    'retornar': 'RETURN',  # return
-    'tentar': 'TRY',  # try
-    'enquanto': 'WHILE',  # while
+
+    'se': 'IF',  # if
+    'ouse': 'ELIF',  # elif
+    'senao': 'ELSE',  # else
+
+    'is': 'IS',  # is
+    'nao': 'BNOT',  # not
 }
 
 

@@ -40,7 +40,7 @@ class TestTokens(unittest.TestCase):
         145
         1.3
         3.145
-        "hi mom!"
+        "oi mãe!"
         variable
         '''
         lines = self.get_lines(self.test_literals)
@@ -68,7 +68,7 @@ class TestTokens(unittest.TestCase):
         self.lexer.input(lines.next())
         tok = self.lexer.token()
         self.assertEqual(tok.type, 'SCONST')
-        self.assertEqual(tok.value, "hi mom!", tok.value)
+        self.assertEqual(tok.value, "oi mãe!", tok.value)
 
         self.lexer.input(lines.next())
         tok = self.lexer.token()
@@ -465,7 +465,7 @@ class TestTokens(unittest.TestCase):
 
         se a < b:
             c = b
-        else:
+        senao:
             c = d
         x = c
         """
@@ -513,7 +513,7 @@ class TestTokens(unittest.TestCase):
 
         tok = self.lexer.token()
         self.assertEqual(tok.type, 'ELSE', tok.type)
-        self.assertEqual(tok.value, 'else')
+        self.assertEqual(tok.value, 'senao')
         tok = self.lexer.token()
         self.assertEqual(tok.type, 'COLON', tok.type)
         self.assertEqual(tok.value, ':')
